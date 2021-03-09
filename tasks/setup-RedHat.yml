@@ -1,0 +1,27 @@
+---
+- name: Include OS-specific variables (RedHat).
+  include_vars: "{{ ansible_os_family }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  when:
+  - ansible_os_family == 'RedHat'
+  - ansible_distribution != 'Fedora'
+
+- name: Add Kubic project GPG key.
+  rpm_key:
+    key: "{{ kubic_yum_gpg_key }}"
+    state: present
+
+- name: Add Kubic project repository.
+  get_url:
+    url: "{{ kubic_yum_repository }}"
+    dest: "/etc/yum.repos.d/devel:kubic:libcontainers:stable.repo"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add CRI-O repository.
+  get_url:
+    url: "{{ crio_yum_repository }}"
+    dest: "/etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo"
+    owner: root
+    group: root
+    mode: 0644

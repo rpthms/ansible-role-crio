@@ -1,0 +1,45 @@
+---
+- name: Ensure dependencies are installed.
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg2
+    state: present
+
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+  when: ansible_os_family == 'Debian'
+
+- name: Add Kubic project apt key.
+  apt_key:
+    url: "{{ kubic_apt_gpg_key }}"
+    id: 2472D6D0D2F66AF87ABA8DA34D64390375060AA4
+    state: present
+  register: add_kubic_repository_key
+  ignore_errors: "{{ kubic_apt_ignore_key_error }}"
+
+- name: Ensure curl is present (on older systems without SNI).
+  package: name=curl state=present
+  when: add_kubic_repository_key is failed
+
+- name: Add Kubic project apt key (alternative for older systems without SNI).
+  shell: >
+    curl -sSL {{ kubic_apt_gpg_key }} | sudo apt-key add -
+  args:
+    warn: false
+  when: add_kubic_repository_key is failed
+
+- name: Add Kubic project repository.
+  apt_repository:
+    repo: "{{ kubic_apt_repository }}"
+    filename: "devel:kubic:libcontainers:stable"
+    state: present
+    update_cache: true
+
+- name: Add CRI-O repository.
+  apt_repository:
+    repo: "{{ crio_apt_repository }}"
+    filename: "devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}"
+    state: present
+    update_cache: true

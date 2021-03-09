@@ -1,0 +1,12 @@
+---
+# Package options.
+crio_package: cri-o
+crio_package_state: present
+
+# Service options.
+crio_service_state: started
+crio_service_enabled: true
+
+# Used only for Debian/Ubuntu.
+kubic_apt_arch: amd64
+kubic_apt_ignore_key_error: true
