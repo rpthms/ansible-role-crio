@@ -1,4 +1,6 @@
 ---
+crio_version: "1.20"
+
 # Package options.
 crio_package: cri-o
 crio_package_state: present
