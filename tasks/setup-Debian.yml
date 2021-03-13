@@ -5,6 +5,7 @@
       - apt-transport-https
       - ca-certificates
       - gnupg2
+      - curl
     state: present
 
 - name: Include OS-specific variables
@@ -18,10 +19,6 @@
     state: present
   register: add_kubic_repository_key
   ignore_errors: "{{ kubic_apt_ignore_key_error }}"
-
-- name: Ensure curl is present (on older systems without SNI).
-  package: name=curl state=present
-  when: add_kubic_repository_key is failed
 
 - name: Add Kubic project apt key (alternative for older systems without SNI).
   shell: >
@@ -41,5 +38,26 @@
   apt_repository:
     repo: "{{ crio_apt_repository }}"
     filename: "devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}"
+    state: present
+    update_cache: true
+
+- name: Add Kubernetes apt key.
+  apt_key:
+    url: "{{ kubernetes_apt_gpg_key }}"
+    state: present
+  register: add_kubernetes_repository_key
+  ignore_errors: "{{ kubernetes_apt_ignore_key_error }}"
+
+- name: Add Kubernetes apt key (alternative for older systems without SNI).
+  shell: >
+    curl -sSL {{ kubic_apt_gpg_key }} | sudo apt-key add -
+  args:
+    warn: false
+  when: add_kubernetes_repository_key is failed
+
+- name: Add Kubernetes repository.
+  apt_repository:
+    repo: "{{ kubernetes_apt_repository }}"
+    filename: "kubernetes"
     state: present
     update_cache: true

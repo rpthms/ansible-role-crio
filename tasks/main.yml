@@ -11,6 +11,11 @@
     state: "{{ crio_package_state }}"
   when: ansible_os_family == 'Debian'
 
+- name: Install kubernetes-cni
+  package:
+    name: "kubernetes-cni"
+    state: "{{ crio_package_state }}"
+
 - name: Ensure CRI-O is installed.
   package:
     name: "{{ crio_package }}"

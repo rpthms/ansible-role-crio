@@ -12,3 +12,16 @@ crio_service_enabled: true
 # Used only for Debian/Ubuntu.
 kubic_apt_arch: amd64
 kubic_apt_ignore_key_error: true
+
+# Kubernetes repositories
+kubernetes_apt_release_channel: main
+# Note that xenial repo is used for all Debian derivatives at this time.
+kubernetes_apt_repository: "deb http://apt.kubernetes.io/ kubernetes-xenial {{ kubernetes_apt_release_channel }}"
+kubernetes_apt_gpg_key: "https://packages.cloud.google.com/apt/doc/apt-key.gpg"
+kubernetes_apt_ignore_key_error: false
+
+kubernetes_yum_arch: '$basearch'
+kubernetes_yum_base_url: "https://packages.cloud.google.com/yum/repos/kubernetes-el7-{{ kubernetes_yum_arch }}"
+kubernetes_yum_gpg_key:
+  - https://packages.cloud.google.com/yum/doc/yum-key.gpg
+  - https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
