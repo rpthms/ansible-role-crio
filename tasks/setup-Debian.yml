@@ -58,6 +58,5 @@
 - name: Add Kubernetes repository.
   apt_repository:
     repo: "{{ kubernetes_apt_repository }}"
-    filename: "kubernetes"
     state: present
     update_cache: true
