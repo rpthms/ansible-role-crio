@@ -16,6 +16,21 @@
     name: "kubernetes-cni"
     state: "{{ crio_package_state }}"
 
+- name: Install containers-common
+  package:
+    name: "containers-common"
+    state: "{{ crio_package_state }}"
+
+- name: Set the CRI-O storage driver
+  lineinfile:
+    path: "/etc/containers/storage.conf"
+    regexp: '^driver\s*='
+    line: 'driver = "{{ crio_storage_driver }}"'
+    owner: root
+    group: root
+    mode: 0644
+  when: crio_config_override is defined and crio_config_override is not none
+
 - name: Ensure CRI-O is installed.
   package:
     name: "{{ crio_package }}"

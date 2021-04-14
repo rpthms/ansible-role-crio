@@ -9,6 +9,9 @@ crio_package_state: present
 crio_service_state: started
 crio_service_enabled: true
 
+# Storage driver
+crio_storage_driver: "overlay"
+
 # Used only for Debian/Ubuntu.
 kubic_apt_arch: amd64
 kubic_apt_ignore_key_error: true
