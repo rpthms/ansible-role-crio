@@ -21,7 +21,7 @@
 - name: Add CRI-O repository.
   get_url:
     url: "{{ crio_yum_repository }}"
-    dest: "/etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}.repo"
+    dest: "/etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o.repo"
     owner: root
     group: root
     mode: 0644

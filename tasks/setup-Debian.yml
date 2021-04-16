@@ -37,7 +37,7 @@
 - name: Add CRI-O repository.
   apt_repository:
     repo: "{{ crio_apt_repository }}"
-    filename: "devel:kubic:libcontainers:stable:cri-o:{{ crio_version }}"
+    filename: "devel:kubic:libcontainers:stable:cri-o"
     state: present
     update_cache: true
 
