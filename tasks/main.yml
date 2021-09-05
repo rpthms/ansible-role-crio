@@ -9,7 +9,23 @@
   package:
     name: "cri-o-runc"
     state: "{{ crio_package_state }}"
-  when: ansible_os_family == 'Debian'
+  when:
+    - ansible_os_family == 'Debian'
+    - crio_runtime == 'runc'
+
+- name: Install crun
+  package:
+    name: "crun"
+    state: "{{ crio_package_state }}"
+  when: crio_runtime == 'crun'
+
+- name: Configure CRI-O to use crun
+  copy:
+    src: "crun.conf"
+    dest: "/etc/crio/crio.conf.d/99-crun.conf"
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Install kubernetes-cni
   package:

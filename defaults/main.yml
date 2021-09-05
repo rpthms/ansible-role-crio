@@ -12,6 +12,9 @@ crio_service_enabled: true
 # Storage driver
 crio_storage_driver: "overlay"
 
+# Container runtime
+crio_runtime: "runc"
+
 # Used only for Debian/Ubuntu.
 kubic_apt_arch: amd64
 kubic_apt_ignore_key_error: true
