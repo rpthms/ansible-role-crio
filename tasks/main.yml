@@ -19,6 +19,14 @@
     state: "{{ crio_package_state }}"
   when: crio_runtime == 'crun'
 
+- name: Ensure /etc/crio/crio.conf.d exists
+  file:
+    path: "/etc/crio/crio.conf.d"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
 - name: Configure CRI-O to use crun
   copy:
     src: "crun.conf"
