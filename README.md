@@ -32,6 +32,10 @@ To set the storage driver for CRI-O, set the following variable:
 
     crio_storage_driver: zfs
 
+To change the container runtime, set the following variable (Currently supported runtimes: runc, crun):
+
+    crio_runtime: crun
+
 Service controls. You can install CRI-O but not have it running or enabled on boot by changing these defaults.
 
     kubic_apt_ignore_key_error: true
