@@ -12,8 +12,14 @@ crio_service_enabled: true
 # Storage driver
 crio_storage_driver: "overlay"
 
+# Systemd slice to run the cri-o service in
+crio_systemd_slice: "system.slice"
+
 # Container runtime
 crio_runtime: "runc"
+
+# CRI-O extra configurations
+crio_extra_config: ''
 
 # Used only for Debian/Ubuntu.
 kubic_apt_arch: amd64
