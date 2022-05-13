@@ -12,13 +12,29 @@
   include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when: ansible_os_family == 'Debian'
 
-- name: Download the Kubic project apt key
-  get_url:
-    url: "{{ kubic_apt_gpg_key }}"
-    dest: "{{ kubic_apt_gpg_key_local_path }}"
-    owner: root
-    group: root
-    mode: 0644
+- name: Check if the Kubic project apt key exists
+  stat:
+    path: "{{ kubic_apt_gpg_key_local_path }}"
+  register: kubic_apt_key_stat
+
+- name: Add the Kubic project apt key
+  block:
+    - name: Download the Kubic project apt key to a temporary file
+      get_url:
+        url: "{{ kubic_apt_gpg_key }}"
+        dest: "{{ kubic_apt_gpg_key_local_path }}.tmp"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Dearmor the downloaded GPG key
+      shell: "cat {{ kubic_apt_gpg_key_local_path }}.tmp | gpg --dearmor > {{ kubic_apt_gpg_key_local_path }}"
+
+    - name: Delete the temporary GPG key
+      file:
+        path: "{{ kubic_apt_gpg_key_local_path }}.tmp"
+        state: absent
+  when: not kubic_apt_key_stat.exists
 
 - name: Add Kubic project repository.
   apt_repository:
@@ -34,13 +50,29 @@
     state: present
     update_cache: true
 
-- name: Download the Kubernetes apt key
-  get_url:
-    url: "{{ kubernetes_apt_gpg_key }}"
-    dest: "{{ kubernetes_apt_gpg_key_local_path }}"
-    owner: root
-    group: root
-    mode: 0644
+- name: Check if the Kubernetes apt key exists
+  stat:
+    path: "{{ kubernetes_apt_gpg_key_local_path }}"
+  register: kubernetes_apt_key_stat
+
+- name: Add the Kubernetes project apt key
+  block:
+    - name: Download the Kubernetes project apt key to a temporary file
+      get_url:
+        url: "{{ kubernetes_apt_gpg_key }}"
+        dest: "{{ kubernetes_apt_gpg_key_local_path }}.tmp"
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Dearmor the downloaded GPG key
+      shell: "cat {{ kubernetes_apt_gpg_key_local_path }}.tmp | gpg --dearmor > {{ kubernetes_apt_gpg_key_local_path }}"
+
+    - name: Delete the temporary GPG key
+      file:
+        path: "{{ kubernetes_apt_gpg_key_local_path }}.tmp"
+        state: absent
+  when: not kubernetes_apt_key_stat.exists
 
 - name: Add Kubernetes repository.
   apt_repository:
