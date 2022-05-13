@@ -34,7 +34,7 @@
       file:
         path: "{{ kubic_apt_gpg_key_local_path }}.tmp"
         state: absent
-  when: not kubic_apt_key_stat.exists
+  when: not kubic_apt_key_stat.stat.exists
 
 - name: Add Kubic project repository.
   apt_repository:
@@ -72,7 +72,7 @@
       file:
         path: "{{ kubernetes_apt_gpg_key_local_path }}.tmp"
         state: absent
-  when: not kubernetes_apt_key_stat.exists
+  when: not kubernetes_apt_key_stat.stat.exists
 
 - name: Add Kubernetes repository.
   apt_repository:
