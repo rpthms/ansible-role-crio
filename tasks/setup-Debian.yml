@@ -12,20 +12,13 @@
   include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
   when: ansible_os_family == 'Debian'
 
-- name: Add Kubic project apt key.
-  apt_key:
+- name: Download the Kubic project apt key
+  get_url:
     url: "{{ kubic_apt_gpg_key }}"
-    id: 2472D6D0D2F66AF87ABA8DA34D64390375060AA4
-    state: present
-  register: add_kubic_repository_key
-  ignore_errors: "{{ kubic_apt_ignore_key_error }}"
-
-- name: Add Kubic project apt key (alternative for older systems without SNI).
-  shell: >
-    curl -sSL {{ kubic_apt_gpg_key }} | sudo apt-key add -
-  args:
-    warn: false
-  when: add_kubic_repository_key is failed
+    dest: "{{ kubic_apt_gpg_key_local_path }}"
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Add Kubic project repository.
   apt_repository:
@@ -41,19 +34,13 @@
     state: present
     update_cache: true
 
-- name: Add Kubernetes apt key.
-  apt_key:
+- name: Download the Kubernetes apt key
+  get_url:
     url: "{{ kubernetes_apt_gpg_key }}"
-    state: present
-  register: add_kubernetes_repository_key
-  ignore_errors: "{{ kubernetes_apt_ignore_key_error }}"
-
-- name: Add Kubernetes apt key (alternative for older systems without SNI).
-  shell: >
-    curl -sSL {{ kubic_apt_gpg_key }} | sudo apt-key add -
-  args:
-    warn: false
-  when: add_kubernetes_repository_key is failed
+    dest: "{{ kubernetes_apt_gpg_key_local_path }}"
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Add Kubernetes repository.
   apt_repository:

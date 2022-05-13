@@ -1,5 +1,6 @@
 ---
 kubic_apt_gpg_key: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_22.04/Release.key"
+kubic_apt_gpg_key_local_path: "/usr/share/keyrings/kubic_ubuntu_22.04_release_key.gpg"
 
-kubic_apt_repository: "deb [arch={{ kubic_apt_arch }}] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_22.04 /"
-crio_apt_repository: "deb [arch={{ kubic_apt_arch }}] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{ crio_version }}/xUbuntu_22.04 /"
+kubic_apt_repository: "deb [signed-by={{ kubic_apt_gpg_key_local_path }} arch={{ kubic_apt_arch }}] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_22.04 /"
+crio_apt_repository: "deb [signed-by={{ kubic_apt_gpg_key_local_path }} arch={{ kubic_apt_arch }}] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/{{ crio_version }}/xUbuntu_22.04 /"
